@@ -1,0 +1,15 @@
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#mainbody {
+   background: linear-gradient(#D3E5FD, white);
+}
+
+#mainlogin {
+    background-color: white;
+    box-shadow: 0px 0px 7px 5px rgba(0, 0, 0, 0.05);
+}
+
+#loginlogo {
+    filter: drop-shadow(0px 0px 3px #d9d7d7);
+}
