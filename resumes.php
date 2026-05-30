@@ -35,7 +35,6 @@ if(!isset($_SESSION['employee']))
                     <br><br>
                 </div>
 
-                <tbody>
                     <?php
                         $files = glob("resumes/*.json");
                         ?>
@@ -62,7 +61,6 @@ if(!isset($_SESSION['employee']))
 
                             }
                         ?>
-                    </tbody>
                 </table>
             </div>
         </div>
