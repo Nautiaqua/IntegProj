@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if(!isset($_SESSION['employee']))
+{
+    header("Location: employee.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -17,7 +27,11 @@
     </head>
     <body data-bs-theme="light">
         <div class="container-fluid">
-            <!-- content in here -->
+            <div class="row">
+                <div class="col-12 d-flex align-items-center justify-content-center min-vh-100">
+                    <h1>Welcome, <?php echo $_SESSION['employee']; ?></h1>
+                </div>
+            </div>
         </div>
 
         <!-- bootstrap json -->
