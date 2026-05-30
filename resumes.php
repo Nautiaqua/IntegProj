@@ -6,21 +6,6 @@ if(!isset($_SESSION['employee']))
     header("Location: employee.php");
     exit();
 }
-
-if(isset($_POST['btnUploadPhoto']))
-{
-    $tmpFile = $_FILES['newPhoto']['tmp_name'];
-    $newPhoto = $_FILES['newPhoto']['name'];
-    $destination = "uploads/" . $newPhoto;
-
-    if(move_uploaded_file($tmpFile, $destination))
-    {
-        $jsonFile = urldecode($_POST['json_file']);
-        $data = json_decode(file_get_contents($jsonFile), true);
-        $data['photo'] = $destination;
-        file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT));
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -128,8 +113,6 @@ if(isset($_POST['btnUploadPhoto']))
 
                         $submitted = date("Y-m-d", $data['_filemtime']);
 
-                        $fileEncoded = urlencode($data['_file']);
-
                         echo "<tr
                             data-name='" . htmlspecialchars($data['name']) . "'
                             data-age='" . htmlspecialchars($age) . "'
@@ -137,7 +120,6 @@ if(isset($_POST['btnUploadPhoto']))
                         >";
 
                         echo "<td>";
-
                         if(!empty($photo))
                         {
                             $imagePath = $photo;
@@ -147,15 +129,6 @@ if(isset($_POST['btnUploadPhoto']))
                         {
                             echo "<span>No photo</span>";
                         }
-
-                        echo "<br>";
-                        echo "<form method='POST' enctype='multipart/form-data'>";
-                        echo "<input type='hidden' name='json_file' value='" . $fileEncoded . "'>";
-                        echo "<input type='hidden' name='MAX_FILE_SIZE' value='2097152'>";
-                        echo "<input type='file' name='newPhoto' accept='image/*'>";
-                        echo "<button type='submit' name='btnUploadPhoto'>Upload</button>";
-                        echo "</form>";
-
                         echo "</td>";
 
                         echo "<td>" . htmlspecialchars($data['name']) . "</td>";
