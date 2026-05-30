@@ -27,14 +27,66 @@ if(!isset($_SESSION['employee']))
     </head>
     <body data-bs-theme="light">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 d-flex align-items-center justify-content-center min-vh-100">
+            <div class="container mt-4">
+                <div class="text-center mb-4">
                     <h1>Welcome, <?php echo $_SESSION['employee']; ?></h1>
+                    <h4>Resume Applicants</h4>
+                    <input type="text" id="searchInput" placeholder="Search applicant...">
+                    <br><br>
                 </div>
+
+                <tbody>
+                    <?php
+                        $files = glob("resumes/*.json");
+                        ?>
+
+                        <table border="1" cellpadding="5" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Applying for</th>
+                                </tr>
+                            </thead>
+
+                            <?php
+                            foreach($files as $file){
+
+                                $data = json_decode(file_get_contents($file), true);
+
+                                echo "<tr>";
+                                echo "<td>".$data['name']."</td>";
+                                echo "<td>".$data['email']."</td>";
+                                echo "<td>".$data['applyingfor']."</td>";
+                                echo "</tr>";
+
+                            }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- bootstrap json -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </body>
+    <script>
+document.getElementById("searchInput").addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(function(row){
+
+        if(row.textContent.toLowerCase().includes(value)){
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+
+});
+</script>
 </html>
