@@ -19,6 +19,7 @@
         if (str_contains($applicant, $_SESSION['currentSearch']))
             return $applicant;
     }
+    
 ?>
 
 <html>
@@ -42,6 +43,7 @@
                 <div class="row">
                     <h4>Resume Applicants</h4>
                 </div>
+                
 
                 <form method="post" action="resumeview.php">
                     <div class="row">
@@ -57,6 +59,10 @@
                         </div>
                     </div>
                 </form>
+                <div class="d-flex align-items-center gap-3">
+                <span class="" style="font-size:0.85rem;"><?php echo htmlspecialchars($_SESSION['currentEmail']); ?></span>
+                <a href="employee.php" class="">Log out</a>
+            </div>
 
                 <?php
                     $files = glob("Resume/Details/*.json");
@@ -81,6 +87,7 @@
                     <thead>
                         <tr>
                             <th>Photo</th>
+            
                             <th>Name</th>
                             <th>Email</th>
                             <th>Age</th>
@@ -173,6 +180,17 @@
                 </table>
             </div>
         </div>
+          <style>
+            body{
+                background-color:#dfe7f3;
+                font-family: 'Monserrat', sans-serif;
+            }
+            #mainlogin{
+                background-color: white;
+                box-shadow:0 4px 15px rgba(0,0,0,0.1);
+            }
+        </style>
+        
 
         <!-- bootstrap json -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
