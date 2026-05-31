@@ -1,3 +1,13 @@
+<!-- just handles going between forms, i cooked wit this one -->
+<?php
+    session_start();
+    
+    $_SESSION["currentEmail"] = $_POST["genEmail"];
+    if (str_contains($_SESSION["currentEmail"], "@cloudtravels.ph")) {
+        header("Location: emplogin.php");
+    }
+    else header("Location: apply.php");
+?>
 
 <html>
     <head>
@@ -15,7 +25,7 @@
         <div class="container-fluid">
             <!-- content in here -->
         </div>
-
+        
         <!-- bootstrap json -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </body>

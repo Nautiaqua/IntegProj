@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
@@ -33,12 +28,11 @@
                 <div class="row d-flex justify-content-center"><hr class="my-3" style="width: 20rem;"></tediv>
                 <div class="row">
                     <div class="col">
-                        <form class="d-flex flex-column justify-content-center gap-3">
-                            <input type="text" name="txtEmail" style="width: 200px; border: none; border-radius: 0.6rem; width: stretch;" class="bg-body-secondary p-2" placeholder="&nbsp;Email" required/>
-                            <button type="button" class="btn btn-primary" style="border-radius: 0.6rem; background-color: #0b81db;">Proceed</button>
+                        <form method="post" action="load.php" class="d-flex flex-column justify-content-center gap-3">
+                            <input type="email" name="genEmail" class="form-control bg-body-secondary border-0" placeholder="Email" required>
+                            <input type="submit" class="btn btn-primary" style="border-radius: 0.6rem; background-color: #0b81db;"/>
                         </form>
                     </div>
-                    
                 </div>
             </div>
         </div>
