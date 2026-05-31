@@ -59,7 +59,7 @@
                 </form>
 
                 <?php
-                    $files = glob("resumes/*.json");
+                    $files = glob("Resume/Details/*.json");
 
                     $applicants = array();
 
@@ -137,7 +137,7 @@
                                 if(!empty($photo))
                                 {
                                     $imagePath = $photo;
-                                    echo "<img src='" . htmlspecialchars($imagePath) . "' alt='Photo' width='50' height='50' style='object-fit:cover; border-radius:4px;'>";
+                                    echo "<img src='{$imagePath}' alt='Photo' width='64' height='64' style='object-fit:cover; border-radius:4px;'>";
                                 }
                                 else
                                 {
@@ -154,7 +154,7 @@
                                 echo "<td>";
                                 if(!empty($resumeFile))
                                 {
-                                    echo "<a href='download_resume.php?file=" . urlencode($resumeFile) . "' class='btn btn-sm btn-primary'>Download</a>";
+                                    echo "<a href='{$resumeFile}' class='btn btn-sm btn-primary'>Download</a>";
                                 }
                                 else
                                 {

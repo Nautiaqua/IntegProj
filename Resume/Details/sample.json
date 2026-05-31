@@ -1,0 +1,8 @@
+{
+    "photo": "Resume/Images/sampleimage1.png",
+    "name": "Juan Dela Cruz",
+    "email": "juan@gmail.com",
+    "age:" : "33",
+    "applyingfor": "Web Developer",
+    "resume_file": "Resume/Files/testfile.pdf"
+}
