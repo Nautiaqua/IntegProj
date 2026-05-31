@@ -7,17 +7,29 @@
         exit();
     }
 
+    // Refresh button clears search
+    if(isset($_POST['btnRefresh']))
+    {
+        $_SESSION['currentSearch'] = null;
+        header("Location: resumeview.php");
+        exit();
+    }
+
     // part that handles search storage   
     if(isset($_POST['btnSearch']))
     {
         $searchInput = trim($_POST['searchInput']);
-        if (empty(trim($searchInput))) $_SESSION['currentSearch'] = null;
+        if (empty($searchInput)) $_SESSION['currentSearch'] = null;
         else $_SESSION['currentSearch'] = $searchInput;
+
+        header("Location: resumeview.php");
+        exit();
     }
 
     function nameFilter($applicant) {
-        if (str_contains($applicant, $_SESSION['currentSearch']))
-            return $applicant;
+        if (!is_array($applicant)) return false;
+        if (!isset($applicant['name'])) return false;
+        return str_contains(strtolower($applicant['name']), strtolower($_SESSION['currentSearch']));
     }
     
 ?>
@@ -38,35 +50,32 @@
         <div class="container-fluid">
             <div class="container mt-4 p-5" style="background-color: white; border-radius: 1.6rem;">
                 <div class="row">
-                    <div class="col"><h1>Welcome, <?php echo $_SESSION['currentEmail']; ?></h1></div>
+                    <div class="col"><h1>Welcome, <?php echo htmlspecialchars($_SESSION['currentEmail']); ?></h1></div>
                 </div>
                 <div class="row">
                     <h4>Resume Applicants</h4>
                 </div>
-                
 
                 <form method="post" action="resumeview.php">
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-4">
-                            <input type="text" name="searchInput" style="width: fill;" class="form-control bg-body-secondary border-0" placeholder="Search for Applicant Name" 
-                                value="<?php
-                                    if (isset($_SESSION['currentSearch']) && $_SESSION['currentSearch'] != "") echo $_SESSION['currentSearch'];
-                                    else echo "";?>"
-                                >
+                            <input type="text" name="searchInput" class="form-control bg-body-secondary border-0" placeholder="Search for Applicant Name"
+                                value="<?php echo isset($_SESSION['currentSearch']) ? htmlspecialchars($_SESSION['currentSearch']) : ''; ?>">
                         </div>
-                        <div class="col-8 d-flex justify-content-start">
+                        <div class="col-8 d-flex justify-content-start gap-2">
                             <input name="btnSearch" type="submit" class="btn btn-primary" style="width: 5rem; border-radius: 0.6rem; background-color: #0b81db;" value="Search"/>
+                            <input name="btnRefresh" type="submit" class="btn btn-secondary" style="width: 6rem; border-radius: 0.6rem;" value="↺ Refresh"/>
                         </div>
                     </div>
                 </form>
-                <div class="d-flex align-items-center gap-3">
-                <span class="" style="font-size:0.85rem;"><?php echo htmlspecialchars($_SESSION['currentEmail']); ?></span>
-                <a href="employee.php" class="">Log out</a>
-            </div>
+
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span style="font-size:0.85rem;"><?php echo htmlspecialchars($_SESSION['currentEmail']); ?></span>
+                    <a href="employee.php">Log out</a>
+                </div>
 
                 <?php
-                    $files = glob("Resume/Details/*.json");
-
+                    $files = glob("resumes/*.json");
                     $applicants = array();
 
                     foreach($files as $file)
@@ -74,12 +83,12 @@
                         $data = json_decode(file_get_contents($file), true);
                         $data['_file'] = $file;
                         $data['_filemtime'] = filemtime($file);
+                        $applicants[] = $data;
+                    }
 
-                        // dis just turns the applicants array into an array of arrays
-                        if (!empty($_SESSION['currentSearch'])) {
-                            $applicants = array_filter($data, "nameFilter");
-                        }
-                        else $applicants[] = $data;
+                    // Filter applicants by name search
+                    if (!empty($_SESSION['currentSearch'])) {
+                        $applicants = array_values(array_filter($applicants, "nameFilter"));
                     }
                 ?>
 
@@ -87,7 +96,6 @@
                     <thead>
                         <tr>
                             <th>Photo</th>
-            
                             <th>Name</th>
                             <th>Email</th>
                             <th>Age</th>
@@ -100,38 +108,21 @@
 
                     <?php
                         if (count($applicants) > 0) {
-                            // dis actually handles the table generation
                             foreach($applicants as $data)
                             {
                                 $photo = "";
                                 if(!empty($data['photo']) && file_exists($data['photo']))
-                                {
                                     $photo = $data['photo'];
-                                }
                                 elseif(!empty($data['image']) && file_exists($data['image']))
-                                {
                                     $photo = $data['image'];
-                                }
 
                                 $resumeFile = "";
                                 if(!empty($data['resume_file']) && file_exists($data['resume_file']))
-                                {
                                     $resumeFile = $data['resume_file'];
-                                }
                                 elseif(!empty($data['resume']) && file_exists($data['resume']))
-                                {
                                     $resumeFile = $data['resume'];
-                                }
 
-                                if(!empty($data['age']))
-                                {
-                                    $age = $data['age'];
-                                }
-                                else
-                                {
-                                    $age = "";
-                                }
-
+                                $age = !empty($data['age']) ? $data['age'] : "";
                                 $submitted = date("Y-m-d", $data['_filemtime']);
 
                                 echo "<tr
@@ -142,14 +133,9 @@
 
                                 echo "<td>";
                                 if(!empty($photo))
-                                {
-                                    $imagePath = $photo;
-                                    echo "<img src='{$imagePath}' alt='Photo' width='64' height='64' style='object-fit:cover; border-radius:4px;'>";
-                                }
+                                    echo "<img src='" . htmlspecialchars($photo) . "' alt='Photo' width='50' height='50' style='object-fit:cover; border-radius:4px;'>";
                                 else
-                                {
                                     echo "<span>No photo</span>";
-                                }
                                 echo "</td>";
 
                                 echo "<td>" . htmlspecialchars($data['name']) . "</td>";
@@ -160,39 +146,36 @@
 
                                 echo "<td>";
                                 if(!empty($resumeFile))
-                                {
-                                    echo "<a href='{$resumeFile}' class='btn btn-sm btn-primary'>Download</a>";
-                                }
+                                    echo "<a href='download_resume.php?file=" . urlencode($resumeFile) . "' class='btn btn-sm btn-primary'>Download</a>";
                                 else
-                                {
                                     echo "<span>No file</span>";
-                                }
                                 echo "</td>";
 
                                 echo "</tr>";
                             }
                         }
-                        else echo "No valid applicants!";   
-                        
+                        else {
+                            echo "<tr><td colspan='7' class='text-center'>No valid applicants!</td></tr>";
+                        }
                     ?>
 
                     </tbody>
                 </table>
             </div>
         </div>
-          <style>
-            body{
-                background-color:#dfe7f3;
-                font-family: 'Monserrat', sans-serif;
+
+        <style>
+            body {
+                background-color: #dfe7f3;
+                font-family: 'Montserrat', sans-serif;
             }
-            #mainlogin{
+            #mainlogin {
                 background-color: white;
-                box-shadow:0 4px 15px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             }
         </style>
-        
 
-        <!-- bootstrap json -->
+        <!-- bootstrap js -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </body>
 </html>
