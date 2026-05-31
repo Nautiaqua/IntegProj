@@ -26,19 +26,30 @@
                         <p><b>Uploading resume as: </b><?php echo $_SESSION['currentEmail']; ?></p>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="container d-flex flex-column gap-2">
                                 First Name <input required type="text" name="apFName" class="form-control bg-body-secondary border-0" placeholder="First Name">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="container d-flex flex-column gap-2">
                                 Last Name <input required type="text" name="apLName" class="form-control bg-body-secondary border-0" placeholder="Last Name">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="container d-flex flex-column gap-2">
                                 Age <input required type="number" name="apAge" class="form-control bg-body-secondary border-0" placeholder="Age">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="container d-flex flex-column gap-2">
+                                Applying For
+                                <select name="apPos">
+                                    <option value="Web Developer">Web Developer</option>
+                                    <option value="Janitor">Janitor</option>
+                                    <option value="Air Traffic Control">Air Traffic Control</option>
+                                    <option value="Terrorist">Terrorist</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -46,13 +57,21 @@
                     <div class="row"> 
                         <div class="col-6">
                             <div class="container d-flex flex-column gap-2">
-                                Photo (1x1) <input required type="file" name="apAge" accept=".jpg,.png" class="form-control bg-body-secondary border-0">
+                                Photo (1x1) <input required type="file" name="apPhoto" accept=".jpg,.png" class="form-control bg-body-secondary border-0">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="container d-flex flex-column gap-2">
-                                Resume / CV (.pdf or .docx) <input required type="file" name="apAge" accept=".pdf,.docx" class="form-control bg-body-secondary border-0">
+                                Resume / CV (.pdf or .docx) <input required type="file" name="apFile" accept=".pdf,.docx" class="form-control bg-body-secondary border-0">
                             </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12 d-flex flex-row gap-3 justify-content-end">
+                            <a href="index.php" class="btn btn-secondary" style="width: 6rem; border: none; border-radius: 0.6rem;">Back</a>
+                            <input type="reset" class="btn btn-danger" style="width: 6rem; border: none; border-radius: 0.6rem; background-color: #db2a0b;"/>
+                            <input type="submit" class="btn btn-primary" style="width: 6rem; border-radius: 0.6rem; background-color: #0b81db;"/>
                         </div>
                     </div>
                 </form>

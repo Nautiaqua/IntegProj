@@ -1,4 +1,46 @@
+<?php
+    session_start();
 
+    $name = $_POST['apFName'] . " " . $_POST['apLName'];
+    $age = $_POST['apAge'];
+    $position = $_POST['apPos'];
+    $imageFileName = basename($_FILES["apPhoto"]["name"]);
+    $resumeFileName = basename($_FILES["apFile"]["name"]);
+
+    $applicantData = array(
+        "photo"=>"Resume/Files" . $imageFileName,
+        "name"=>$name,
+        "email"=>$_SESSION['currentEmail'],
+        "age"=>$age,
+        "applyingfor"=>$position,
+        "resume_file"=>"Resume/Files" . $resumeFileName
+    );
+
+    // uploads the json details
+    $jsonDetails = json_encode($applicantData);
+    
+
+    // uploads the image
+    $targetFile = "Resume/Images" . $imageFileName;
+    
+    if ($_FILES['apPhoto']["error"] !== UPLOAD_ERR_OK) die("Error Uploading File");
+
+    if (move_uploaded_file($_FILES["apPhoto"]["tmp_name"], $targetFile)) {
+        echo "Success w/ Uploading Image";
+        return $targetFile;
+    } 
+    else echo "Success w/ Uploading Image";
+
+    // uploads the resume file
+    $targetFile2 = "Resume/Files" . $resumeFileName;
+    
+    if ($_FILES['apFile']["error"] !== UPLOAD_ERR_OK) die("Error Uploading File");
+
+    if (move_uploaded_file($_FILES["apFile"]["tmp_name"], $targetFile2)) {
+        echo "Success w/ Uploading Resume File";
+    } 
+    else echo "Failure w/ Uploading Resume File";
+?>
 <html>
     <head>
         <meta charset="utf-8">
