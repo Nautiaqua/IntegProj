@@ -48,7 +48,9 @@
                                     <option value="Web Developer">Web Developer</option>
                                     <option value="Janitor">Janitor</option>
                                     <option value="Air Traffic Control">Air Traffic Control</option>
-                                    <option value="Terrorist">Terrorist</option>
+                                    <option value="Database Manager">Database Manager</option>
+                                    <option value="Technician">Technician</option>
+                                    <option value="Cyber Security Specialist">Cyber Security Specialist</option>
                                 </select>
                             </div>
                         </div>

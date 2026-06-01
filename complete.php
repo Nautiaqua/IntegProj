@@ -54,10 +54,12 @@
 </head>
 <body id="mainbody">
     <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
-        <div class="text-center">
+        <div class="container text-center p-4" id="mainlogin" style="width: 30rem; border-radius: 1.6rem;">
             <h1><b>Application Submitted!</b></h1>
             <br>
-            <p class="mt-3">Hi <strong><?= htmlspecialchars($_SESSION['applicant']) ?></strong>, your resume has been successfully submitted.</p>
+            <img src="Assets/check-mark.png" style="width: 256px; height: 256px;">
+            <br>
+            <p class="mt-3">Hi <b><?php echo $_SESSION['currentEmail']; ?></b> your resume has been successfully submitted.</p>
             <p>We'll be in touch soon. You may now close this page.</p>
             <br>
             <a href="index.php" class="btn btn-primary">Back to Home</a>
