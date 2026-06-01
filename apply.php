@@ -16,7 +16,7 @@
     <body id="mainbody" data-bs-theme="light">
         <div class="container-fluid">
             <div id="mainlogin" class="container mt-4 p-5" style="border-radius: 1.6rem; width: 50rem;">
-                <form method="post" action="complete.php">
+                <form method="post" action="complete.php" enctype="multipart/form-data">
                     <div class="row"><h3>Application</h3></div>
                     <div class="row">
                         <p>Please input your details and upload your resume.</p>

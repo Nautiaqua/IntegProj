@@ -31,9 +31,7 @@
         if (!isset($applicant['name'])) return false;
         return str_contains(strtolower($applicant['name']), strtolower($_SESSION['currentSearch']));
     }
-    
 ?>
-
 <html>
     <head>
         <meta charset="utf-8">
@@ -75,7 +73,7 @@
                 </div>
 
                 <?php
-                    $files = glob("resumes/*.json");
+                    $files = glob("Resume/Details/*.json");
                     $applicants = array();
 
                     foreach($files as $file)
@@ -86,7 +84,7 @@
                         $applicants[] = $data;
                     }
 
-                    // Filter applicants by name search
+                    // does the filtering of applicants by name search
                     if (!empty($_SESSION['currentSearch'])) {
                         $applicants = array_values(array_filter($applicants, "nameFilter"));
                     }
@@ -146,7 +144,7 @@
 
                                 echo "<td>";
                                 if(!empty($resumeFile))
-                                    echo "<a href='download_resume.php?file=" . urlencode($resumeFile) . "' class='btn btn-sm btn-primary'>Download</a>";
+                                    echo "<a href='{$resumeFile}' class='btn btn-sm btn-primary'>Download</a>";
                                 else
                                     echo "<span>No file</span>";
                                 echo "</td>";
