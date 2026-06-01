@@ -121,7 +121,7 @@
                                     $resumeFile = $data['resume'];
 
                                 $age = !empty($data['age']) ? $data['age'] : "";
-                                $submitted = date("Y-m-d", $data['_filemtime']);
+                                $submitted = date("Y-m-d H:i:s", $data['_filemtime']);
 
                                 echo "<tr
                                     data-name='" . htmlspecialchars($data['name']) . "'

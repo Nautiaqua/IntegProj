@@ -1,47 +1,47 @@
 <?php
-session_start();
+    session_start();
 
-if (!isset($_SESSION['currentEmail'])) {
-    header("Location: index.php");
-    exit();
-}
+    if (!isset($_SESSION['currentEmail'])) {
+        header("Location: index.php");
+        exit();
+    }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    @mkdir("Resume/Data",   0777, true);
-    @mkdir("Resume/Images", 0777, true);
-    @mkdir("Resume/Files",  0777, true);
+    function upFile(string $filePath, string $fileVar, bool $isImage) {
+        if ($isImage) $targetFile = $filePath . $_SESSION['currentEmail'] . ".jpg";
+        else {
+            if (str_contains(basename($_FILES[$fileVar]["name"]), '.pdf')) 
+                $targetFile = $filePath . $_SESSION['currentEmail'] . ".pdf";
+            else 
+                $targetFile = $filePath . $_SESSION['currentEmail'] . ".docx";
+        };
 
-    $name           = $_POST['apFName'] . " " . $_POST['apLName'];
-    $age            = $_POST['apAge'];
-    $position       = $_POST['apPos'];
-    $imageFileName  = basename($_FILES["apPhoto"]["name"]);
-    $resumeFileName = basename($_FILES["apFile"]["name"]);
+        if ($_FILES[$fileVar]["error"] !== UPLOAD_ERR_OK) die("Error Uploading File");
+        
+        // optimized it a bit, got UNlazy trying to comment it out.
+        move_uploaded_file($_FILES[$fileVar]["tmp_name"], $targetFile);
+    };
 
-    $applicantData = [
-        "photo"       => "Resume/Images/" . $imageFileName,
-        "name"        => $name,
-        "email"       => $_SESSION['currentEmail'],
-        "age"         => $age,
-        "applyingfor" => $position,
-        "resume_file" => "Resume/Files/" . $resumeFileName
-    ];
+    upFile("Resume/Images/", 'apPhoto', true);
+    upFile("Resume/Files/", 'apFile', false);
 
-    file_put_contents("Resume/Data/" . $name . ".json", json_encode($applicantData));
 
-    if ($_FILES['apPhoto']["error"] !== UPLOAD_ERR_OK) die("Error Uploading Image");
-    if (!move_uploaded_file($_FILES["apPhoto"]["tmp_name"], "Resume/Images/" . $imageFileName)) die("Failure w/ Uploading Image");
+    if (str_contains(basename($_FILES['apFile']["name"]), '.pdf')) 
+        $resumeFileName = $_SESSION['currentEmail'] . ".pdf";
+    else 
+        $resumeFileName = $_SESSION['currentEmail'] . ".docx";
 
-    if ($_FILES['apFile']["error"] !== UPLOAD_ERR_OK) die("Error Uploading Resume");
-    if (!move_uploaded_file($_FILES["apFile"]["tmp_name"], "Resume/Files/" . $resumeFileName)) die("Failure w/ Uploading Resume");
+    $applicantData = array(
+        "photo"=> "Resume/Images/" . $_SESSION['currentEmail'] . ".jpg",
+        "name"=> $_POST['apFName'] . " " . $_POST['apLName'],
+        "email"=> $_SESSION['currentEmail'],
+        "age"=> $_POST['apAge'],
+        "applyingfor"=> $_POST['apPos'],
+        "resume_file"=> "Resume/Files/" . $resumeFileName
+    );
 
-    $_SESSION['applicant'] = $name;
-}
-
-if (!isset($_SESSION['applicant'])) {
-    header("Location: apply.php");
-    exit();
-}
+    file_put_contents('Resume/Details/' . $_SESSION['currentEmail'] . '.json', json_encode($applicantData));
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +60,7 @@ if (!isset($_SESSION['applicant'])) {
             <p class="mt-3">Hi <strong><?= htmlspecialchars($_SESSION['applicant']) ?></strong>, your resume has been successfully submitted.</p>
             <p>We'll be in touch soon. You may now close this page.</p>
             <br>
-            <a href="emplogin.php" class="btn btn-primary">Back to Home</a>
+            <a href="index.php" class="btn btn-primary">Back to Home</a>
         </div>
     </div>
 
