@@ -1,6 +1,10 @@
 <?php
     session_start();
 
+    if (!isset($_SESSION['currentEmail'])) {
+        header("Location: index.php");
+        exit();
+    }
     $message = "";
 
     if (isset($_COOKIE['loggedEmail']) && isset($_COOKIE['loggedPassword'])) {
