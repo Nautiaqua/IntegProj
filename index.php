@@ -1,3 +1,11 @@
+<?php
+    if (isset($_COOKIE['loggedEmail']) && isset($_COOKIE['loggedPassword'])) {
+        if (str_contains($_COOKIE['loggedEmail'], "@cloudtravels.ph")) {
+            header("Location: resumeview.php");
+            exit();
+        }
+    }
+?>
 <html>
     <head>
         <meta charset="utf-8">
@@ -28,7 +36,7 @@
                 <div class="row d-flex justify-content-center"><hr class="my-3" style="width: 20rem;"></tediv>
                 <div class="row">
                     <div class="col">
-                        <form method="post" action="load.php" class="d-flex flex-column justify-content-center gap-3">
+                        <form method="post" action="loginhandler.php" class="d-flex flex-column justify-content-center gap-3">
                             <input type="email" name="genEmail" class="form-control bg-body-secondary border-0" placeholder="Email" required>
                             <input type="submit" class="btn btn-primary" style="border-radius: 0.6rem; background-color: #0b81db;"/>
                         </form>

@@ -1,6 +1,13 @@
 <?php
     session_start();
 
+    if (isset($_COOKIE['loggedEmail']) && isset($_COOKIE['loggedPassword'])) {
+        if (str_contains($_COOKIE['loggedEmail'], "@cloudtravels.ph")) {
+            header("Location: resumeview.php");
+            exit();
+        }
+    }
+
     if (!isset($_SESSION['currentEmail'])) {
         header("Location: index.php");
         exit();
@@ -17,7 +24,6 @@
 
         if ($_FILES[$fileVar]["error"] !== UPLOAD_ERR_OK) die("Error Uploading File");
         
-        // optimized it a bit, got UNlazy trying to comment it out.
         move_uploaded_file($_FILES[$fileVar]["tmp_name"], $targetFile);
     };
 
@@ -30,16 +36,14 @@
     else 
         $resumeFileName = $_SESSION['currentEmail'] . ".docx";
 
-    $applicantData = array(
-        "photo"=> "Resume/Images/" . $_SESSION['currentEmail'] . ".jpg",
-        "name"=> $_POST['apFName'] . " " . $_POST['apLName'],
-        "email"=> $_SESSION['currentEmail'],
-        "age"=> $_POST['apAge'],
-        "applyingfor"=> $_POST['apPos'],
-        "resume_file"=> "Resume/Files/" . $resumeFileName
-    );
+    $applicantData = "Resume/Images/" . $_SESSION['currentEmail'] . ".jpg" . "\n";
+    $applicantData .= $_POST['apFName'] . " " . $_POST['apLName'] . "\n";
+    $applicantData .= $_SESSION['currentEmail'] . "\n";
+    $applicantData .= $_POST['apAge'] . "\n";
+    $applicantData .= $_POST['apPos'] . "\n";
+    $applicantData .= "Resume/Files/" . $resumeFileName;
 
-    file_put_contents('Resume/Details/' . $_SESSION['currentEmail'] . '.json', json_encode($applicantData));
+    file_put_contents('Resume/Details/' . $_SESSION['currentEmail'] . '.txt', $applicantData);
 ?>
 
 <!DOCTYPE html>

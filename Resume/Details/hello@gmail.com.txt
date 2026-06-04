@@ -1,0 +1,6 @@
+Resume/Images/hello@gmail.com.jpg
+Hello World
+hello@gmail.com
+1
+Technician
+Resume/Files/hello@gmail.com.pdf

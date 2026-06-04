@@ -3,7 +3,17 @@
 
     if(!isset($_SESSION['currentEmail']))
     {
-        header("Location: employee.php");
+        header("Location: index.php");
+        exit();
+    }
+
+    if(isset($_POST['btnLogout']))
+    {
+        setcookie('loggedEmail', "", time() - 3600, "/");
+        setcookie('loggedPassword', "", time() - 3600, "/");
+
+        session_destroy();
+        header("Location: index.php");
         exit();
     }
 
@@ -60,28 +70,36 @@
                             <input type="text" name="searchInput" class="form-control bg-body-secondary border-0" placeholder="Search for Applicant Name"
                                 value="<?php echo isset($_SESSION['currentSearch']) ? htmlspecialchars($_SESSION['currentSearch']) : ''; ?>">
                         </div>
-                        <div class="col-8 d-flex justify-content-start gap-2">
+                        <div class="col-4 d-flex justify-content-start gap-2">
                             <input name="btnSearch" type="submit" class="btn btn-primary" style="width: 5rem; border-radius: 0.6rem; background-color: #0b81db;" value="Search"/>
                             <input name="btnRefresh" type="submit" class="btn btn-secondary" style="width: 6rem; border-radius: 0.6rem;" value="↺ Refresh"/>
+                        </div>
+                        <div class="col-4 d-flex justify-content-end gap-2">
+                            <input name="btnLogout" type="submit" class="btn btn-danger" style="width: 5rem; border-radius: 0.6rem; background-color: #db2a0b;" value="Log Out"/>
                         </div>
                     </div>
                 </form>
 
-                <div class="d-flex align-items-center gap-3 mb-3">
-                    <span style="font-size:0.85rem;"><?php echo htmlspecialchars($_SESSION['currentEmail']); ?></span>
-                    <a href="employee.php">Log out</a>
-                </div>
-
                 <?php
-                    $files = glob("Resume/Details/*.json");
+                    $files = glob("Resume/Details/*.txt");
                     $applicants = array();
 
                     foreach($files as $file)
                     {
-                        $data = json_decode(file_get_contents($file), true);
-                        $data['_file'] = $file;
-                        $data['_filemtime'] = filemtime($file);
-                        $applicants[] = $data;
+                        $fileContent = file($file, FILE_IGNORE_NEW_LINES);
+                        
+                        $iteration = 1;
+                        $apData = array(
+                            "photo"=> $fileContent[0],
+                            "name"=>$fileContent[1],
+                            "email"=>$fileContent[2],
+                            "age"=>$fileContent[3],
+                            "applyingfor"=>$fileContent[4],
+                            "resume_file"=>$fileContent[5]
+                        );
+                    
+                        $apData['_filemtime'] = filemtime($file);
+                        $applicants[] = $apData;
                     }
 
                     // does the filtering of applicants by name search

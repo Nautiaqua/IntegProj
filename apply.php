@@ -1,5 +1,12 @@
 <?php
     session_start();
+
+    if (isset($_COOKIE['loggedEmail']) && isset($_COOKIE['loggedPassword'])) {
+        if (str_contains($_COOKIE['loggedEmail'], "@cloudtravels.ph")) {
+            header("Location: resumeview.php");
+            exit();
+        }
+    }
 ?>
 <html>
     <head>

@@ -1,29 +1,44 @@
 <?php
     session_start();
 
-    $employees = array(
-        "marc@cloudtravels.ph" => "12345678", 
-        "aj09@cloudtravels.ph" => "password123", 
-        "aj10@cloudtravels.ph" => "password1234", 
-        "aj11@cloudtravels.ph" => "password12345" );
-
     $message = "";
+
+    if (isset($_COOKIE['loggedEmail']) && isset($_COOKIE['loggedPassword'])) {
+        if (str_contains($_COOKIE['loggedEmail'], "@cloudtravels.ph")) {
+            header("Location: resumeview.php");
+            exit();
+        }
+    }
 
     // just notin for clarity: the isset thingy just checks if the button was pressed
     if(isset($_POST['btnLogin']))
     {
         $inputEmail = $_POST['empEmail'];
         $inputPassword = $_POST['empPass'];
+        $_SESSION['currentEmail'] = $inputEmail;
 
-        if(isset($employees[$inputEmail]) && $employees[$inputEmail] == $inputPassword) {
-            $_SESSION['currentEmail'] = $inputEmail;
+        $adminList = file('adminlist.txt', FILE_IGNORE_NEW_LINES);
+        $correctPass = false;
+        foreach ($adminList as $email) {
+
+            $emailIndex = array_search($email, $adminList);
+            $passIndex = $emailIndex + 1;
+
+            if ($emailIndex == 0 || $emailIndex % 4 == 0)
+                if ($email == $inputEmail)
+                    if ($adminList[$passIndex] == $inputPassword) $correctPass = true;
+        };
+
+        if ($correctPass == true) {
+            if (isset($_POST['rememberMe']) and $_POST['rememberMe'] == true) {
+                setcookie("loggedEmail", $inputEmail, time() + 86400, "/");
+                setcookie("loggedPassword", $inputEmail, time() + 86400, "/");
+            }
+            
 
             header("Location: resumeview.php");
             exit();
-        }
-        else {
-            $message = "Invalid email or password. Please try again.";
-        }
+        } else $message = "Invalid email or password. Please try again.";
     }
 ?>
 
@@ -65,7 +80,10 @@
                     <div class="col">
                         <form method="POST" class="d-flex flex-column justify-content-center gap-3">
                             <input type="email" name="empEmail" class="form-control bg-body-secondary border-0" placeholder="Email" required value="<?php echo $_SESSION["currentEmail"]; ?>">
-                            <input type="password" name="empPass"  class="form-control bg-body-secondary border-0" placeholder="Password" required >
+                            <input type="password" name="empPass" class="form-control bg-body-secondary border-0" placeholder="Password" required >
+                            <div>
+                                <input type="checkbox" name="rememberMe" value=true><label for="rememberMe">&nbsp;&nbsp;Remember Me</label><br>
+                            </div>
                             <button type="submit" name="btnLogin" class="btn btn-primary"> Proceed </button>
                         </form>
                         <?php

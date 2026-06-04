@@ -1,0 +1,6 @@
+Resume/Images/johndoe@gmail.com.jpg
+John Doe
+johndoe@gmail.com
+25
+Air Traffic Control
+Resume/Files/johndoe@gmail.com.pdf
