@@ -2,13 +2,17 @@
 <?php
     session_start();
 
+    if (!isset($_SESSION['currentEmail'])) {
+        header("Location: index.php");
+        exit();
+    }
+    
     if (isset($_COOKIE['loggedEmail']) && isset($_COOKIE['loggedPassword'])) {
         if (str_contains($_COOKIE['loggedEmail'], "@cloudtravels.ph")) {
             header("Location: resumeview.php");
             exit();
         }
     }
-    
     $_SESSION["currentEmail"] = $_POST["genEmail"];
 
     $adminList = file('adminlist.txt', FILE_IGNORE_NEW_LINES);
