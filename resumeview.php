@@ -17,7 +17,7 @@
         exit();
     }
 
-    // Refresh button clears search
+    // refresh buton
     if(isset($_POST['btnRefresh']))
     {
         $_SESSION['currentSearch'] = null;
@@ -54,7 +54,7 @@
         <!-- bootstrap components -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     </head>
-    <body id="mainbody" data-bs-theme="light">
+    <body id="mainbody" applicant-bs-theme="light">
         <div class="container-fluid">
             <div class="container mt-4 p-5" style="background-color: white; border-radius: 1.6rem;">
                 <div class="row">
@@ -89,17 +89,17 @@
                         $fileContent = file($file, FILE_IGNORE_NEW_LINES);
                         
                         $iteration = 1;
-                        $apData = array(
+                        $apapplicant = array(
                             "photo"=> $fileContent[0],
                             "name"=>$fileContent[1],
                             "email"=>$fileContent[2],
                             "age"=>$fileContent[3],
                             "applyingfor"=>$fileContent[4],
-                            "resume_file"=>$fileContent[5]
+                            "resume_file"=>$fileContent[5],
+                            "filetime"=> filemtime($file)
                         );
                     
-                        $apData['_filemtime'] = filemtime($file);
-                        $applicants[] = $apData;
+                        $applicants[] = $apapplicant;
                     }
 
                     // does the filtering of applicants by name search
@@ -124,40 +124,40 @@
 
                     <?php
                         if (count($applicants) > 0) {
-                            foreach($applicants as $data)
+                            foreach($applicants as $applicant)
                             {
                                 $photo = "";
-                                if(!empty($data['photo']) && file_exists($data['photo']))
-                                    $photo = $data['photo'];
-                                elseif(!empty($data['image']) && file_exists($data['image']))
-                                    $photo = $data['image'];
+                                if(!empty($applicant['photo']) && file_exists($applicant['photo']))
+                                    $photo = $applicant['photo'];
+                                elseif(!empty($applicant['image']) && file_exists($applicant['image']))
+                                    $photo = $applicant['image'];
 
                                 $resumeFile = "";
-                                if(!empty($data['resume_file']) && file_exists($data['resume_file']))
-                                    $resumeFile = $data['resume_file'];
-                                elseif(!empty($data['resume']) && file_exists($data['resume']))
-                                    $resumeFile = $data['resume'];
+                                if(!empty($applicant['resume_file']) && file_exists($applicant['resume_file']))
+                                    $resumeFile = $applicant['resume_file'];
+                                elseif(!empty($applicant['resume']) && file_exists($applicant['resume']))
+                                    $resumeFile = $applicant['resume'];
 
-                                $age = !empty($data['age']) ? $data['age'] : "";
-                                $submitted = date("Y-m-d H:i:s", $data['_filemtime']);
+                                $age = !empty($applicant['age']) ? $applicant['age'] : "";
+                                $submitted = date("Y-m-d H:i:s", $applicant['filetime']);
 
                                 echo "<tr
-                                    data-name='" . htmlspecialchars($data['name']) . "'
-                                    data-age='" . htmlspecialchars($age) . "'
-                                    data-time='" . $data['_filemtime'] . "'
-                                >";
+                                        applicant-name='" . $applicant['name'] . "'
+                                        applicant-age='" . $age . "'
+                                        applicant-time='" . $applicant['filetime'] . "'
+                                    >";
 
                                 echo "<td>";
                                 if(!empty($photo))
-                                    echo "<img src='" . htmlspecialchars($photo) . "' alt='Photo' width='50' height='50' style='object-fit:cover; border-radius:4px;'>";
+                                    echo "<img src='{$photo}' alt='Photo' width='50' height='50' style='object-fit:cover; border-radius:4px;'>";
                                 else
                                     echo "<span>No photo</span>";
                                 echo "</td>";
 
-                                echo "<td>" . htmlspecialchars($data['name']) . "</td>";
-                                echo "<td>" . htmlspecialchars($data['email']) . "</td>";
-                                echo "<td>" . htmlspecialchars($age) . "</td>";
-                                echo "<td>" . htmlspecialchars($data['applyingfor']) . "</td>";
+                                echo "<td>" . $applicant['name'] . "</td>";
+                                echo "<td>" . $applicant['email'] . "</td>";
+                                echo "<td>" . $age . "</td>";
+                                echo "<td>" . $applicant['applyingfor'] . "</td>";
                                 echo "<td>" . $submitted . "</td>";
 
                                 echo "<td>";
