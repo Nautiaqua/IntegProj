@@ -1,11 +1,6 @@
 <!-- this is redundant, just too lazy to retool index.php -->
 <?php
     session_start();
-
-    if (!isset($_SESSION['currentEmail'])) {
-        header("Location: index.php");
-        exit();
-    }
     
     if (isset($_COOKIE['loggedEmail']) && isset($_COOKIE['loggedPassword'])) {
         if (str_contains($_COOKIE['loggedEmail'], "@cloudtravels.ph")) {
