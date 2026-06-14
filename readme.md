@@ -1,4 +1,5 @@
 **Parking Management System Design**
+
 This system is meant to only be used by parking area staff. There are NO customer accounts involved.
 ___
 ### Database Layout
