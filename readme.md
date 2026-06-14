@@ -52,6 +52,12 @@ PAGE NAME: **Login.php**
 - Email and password validity will be checked via the **accounts** table in the database.
 - Error message will appear at the bottom if password is incorrect or email is in the wrong format.
 
+PAGE NAME: **Dashboard.php**
+
+*The landing page after logging in, allows the employee to navigate to different parts of the app.*
+- Has buttons / links leading to different parts of the app on the left of the screen.
+- Has a small table showing a summary of available and unavailable parking spots to the right
+
 PAGE NAME: **TableView.php**
 
 *A tabular view of all the parking spaces, their status, and availability*.
